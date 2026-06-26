@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Livro de Visitas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <span class="logo" id="navLogo">Livro de Visitas</span>
+    <div class="nav-right" id="navRight">
+    </div>
+  </nav>
+
+  <div id="telaEntrada" class="tela">
+    <div class="entrada-wrap">
+      <h1 class="entrada-title">Livro de<br/><em>Visitas</em></h1>
+      <div class="entrada-btns">
+        <button class="entrada-card" id="btnSouVisitante">
+          <strong>Sou visitante</strong>
+          <span>Quero registrar minha visita a um museu</span>
+        </button>
+        <button class="entrada-card" id="btnSouMuseu">
+          <strong>Sou um museu</strong>
+          <span>Quero acessar ou cadastrar meu livro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="telaMuseus" class="tela hidden">
+    <header class="hero">
+      <div class="hero-noise"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Onde você<br /><em>esteve hoje?</em></h1>
+        <p class="hero-sub">Escolha o museu que você visitou e deixe sua mensagem.</p>
+      </div>
+    </header>
+
+    <section class="museus-section">
+      <div class="container">
+        <p class="section-label">escolha o museu</p>
+        <div class="museus-grid" id="museusGrid">
+          <div class="loading-wrap">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <p>Carregando museus...</p>
+          </div>
+        </div>
+        <div class="sem-museus hidden" id="semMuseus">
+          <p>Nenhum museu cadastrado ainda.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="telaLivro" class="tela hidden">
+    <div class="livro-header">
+      <button class="btn-voltar" id="btnVoltar">← Voltar</button>
+      <div class="livro-info">
+        <h2 id="livroNomeMuseu">—</h2>
+        <p id="livroCidadeMuseu">—</p>
+      </div>
+      <div class="livro-status">
+        <span id="livroStatusPagina">Página 1</span>
+        <span class="livro-status-sep">·</span>
+        <span id="livroStatusTotal">0 mensagens</span>
+      </div>
+    </div>
+
+    <div class="livro-body">
+      <div class="livro-form-wrap">
+        <p class="section-label">sua visita</p>
+        <h3 class="livro-form-title">Registre sua mensagem</h3>
+        <form class="livro-form" id="livroForm">
+          <div class="form-group">
+            <label for="visNome">Nome</label>
+            <input type="text" id="visNome" placeholder="Seu nome" maxlength="60" />
+            <span class="char-count" id="visNomeCount">0/60</span>
+          </div>
+          <div class="form-group">
+            <label for="visData">Data da visita</label>
+            <input type="date" id="visData" />
+          </div>
+          <div class="form-group">
+            <label for="visMensagem">Mensagem</label>
+            <textarea id="visMensagem" placeholder="O que achou? Deixe sua impressão..." maxlength="280" rows="4"></textarea>
+            <span class="char-count" id="visMsgCount">0/280</span>
+          </div>
+          <button type="submit" class="btn-submit" id="btnRegistrar">
+            <span id="btnRegistrarTxt">Registrar visita</span>
+            <span id="btnRegistrarLoader" class="hidden">Registrando... ⏳</span>
+          </button>
+          <p class="form-aviso">Sua mensagem não poderá ser apagada após o envio.</p>
+        </form>
+
+        <div class="tx-success hidden" id="livroTxSuccess">
+          <div class="success-icon">✓</div>
+          <h3>Visita registrada!</h3>
+          <p>Sua mensagem foi salva com sucesso.</p>
+          <button class="btn-secondary" id="btnRegistrarOutra">Registrar outra visita</button>
+        </div>
+      </div>
+
+      <div class="livro-paginas-wrap">
+        <p class="section-label">páginas do livro</p>
+        <div class="paginas-nav" id="paginasNav"></div>
+        <div class="paginas-conteudo" id="paginasConteudo">
+          <div class="loading-wrap">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <p>Carregando mensagens...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="telaPainel" class="tela hidden">
+    <div class="painel-header">
+      <button class="btn-voltar" id="btnVoltarPainel">← Voltar</button>
+      <h2>Painel do Museu</h2>
+    </div>
+
+    <!-- Conectar carteira -->
+    <div class="painel-body" id="painelConectar">
+      <div class="container-sm center-content">
+        <span class="entrada-icon" style="font-size:3rem">🔐</span>
+        <h3 class="painel-title">Acesso do Museu</h3>
+        <p class="painel-sub">Conecte sua carteira para acessar ou cadastrar seu museu.</p>
+        <button class="btn-primary" id="btnConectarMuseu">Conectar carteira</button>
+      </div>
+    </div>
+
+    <div class="painel-body hidden" id="painelCadastro">
+      <div class="container-sm">
+        <p class="section-label">novo cadastro</p>
+        <h3 class="painel-title">Cadastre seu museu</h3>
+        <p class="painel-sub">Preencha as informações para criar seu livro de visitas.</p>
+        <form class="painel-form" id="cadastroForm">
+          <div class="form-group">
+            <label>Nome do museu</label>
+            <input type="text" id="cadNome" placeholder="Ex: Museu de História Natural" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label>Cidade</label>
+            <input type="text" id="cadCidade" placeholder="Ex: Maceió, AL" maxlength="60" />
+          </div>
+          <div class="form-group">
+            <label>Descrição breve</label>
+            <textarea id="cadDescricao" placeholder="Fale um pouco sobre o museu..." maxlength="200" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Páginas iniciais</label>
+            <input type="number" id="cadPaginas" value="3" min="1" max="100" />
+            <span class="form-hint">Cada página comporta 5 mensagens. Você pode adicionar mais depois.</span>
+          </div>
+          <button type="submit" class="btn-submit" id="btnCadastrar">
+            <span id="btnCadastrarTxt">Cadastrar museu</span>
+            <span id="btnCadastrarLoader" class="hidden">Cadastrando... ⏳</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="painel-body hidden" id="painelExistente">
+      <div class="container-sm">
+        <p class="section-label">meu museu</p>
+        <h3 class="painel-title" id="painelNome">—</h3>
+        <p class="painel-sub" id="painelCidade">—</p>
+
+        <div class="painel-stats">
+          <div class="stat-card">
+            <span class="stat-num" id="statMensagens">—</span>
+            <span class="stat-label">mensagens</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statPaginas">—</span>
+            <span class="stat-label">páginas</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statCapacidade">—</span>
+            <span class="stat-label">capacidade</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="statLivres">—</span>
+            <span class="stat-label">espaços livres</span>
+          </div>
+        </div>
+
+        <div class="painel-progresso">
+          <div class="progresso-label">
+            <span>Ocupação do livro</span>
+            <span id="progressoPct">—</span>
+          </div>
+          <div class="progresso-bar">
+            <div class="progresso-fill" id="progressoFill"></div>
+          </div>
+        </div>
+
+        <div class="adicionar-paginas">
+          <h4>Adicionar páginas</h4>
+          <p>Cada página adiciona 5 novos espaços ao seu livro.</p>
+          <div class="add-row">
+            <input type="number" id="addQtd" value="1" min="1" max="100" />
+            <button class="btn-primary" id="btnAddPaginas">Adicionar páginas</button>
+          </div>
+          <span id="addPaginasStatus" class="form-hint"></span>
+        </div>
+
+        <button class="btn-secondary" id="btnVerLivro">Ver meu livro de visitas →</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <span class="logo">Livro de Visitas</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
